@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>se-timer test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../se-timer.html">
+  </head>
+  <body>
+
+
+    <test-fixture id="DeclarativePropertySetFixture">
+      <template>
+        <se-timer format="hh:mm:ss" value="3600000" timer-step="100"></se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ImperativePropertySetFixture">
+      <template>
+        <se-timer></se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="CorrectTimeDisplayFixture">
+      <template>
+        <se-timer format="hh:mm:ss.ms"></se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="StateTestFixture">
+      <template>
+        <se-timer></se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="FormatTestFixture">
+      <template>
+        <se-timer></se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="IntervalTestFixture">
+      <template>
+        <se-timer timer-step="250"></se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="FirstValueTextFixture">
+      <template>
+        <se-timer>00:20:00</se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="SecondsValueTextFixture">
+      <template>
+        <se-timer>00:20</se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ThirdValueTextFixture">
+      <template>
+        <se-timer>00:2d:01</se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="FourthValueTextFixture">
+      <template>
+        <se-timer format="mm:ss.ms">00:20.1</se-timer>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('se-timer', function() {
+        var clock;
+        clock = sinon.useFakeTimers();
+
+        test('use of declarative syntax for element properties', function() {
+          var element = fixture('DeclarativePropertySetFixture');
+          assert.equal(element.format, 'hh:mm:ss');
+          assert.equal(element.value, 3600000);
+          assert.equal(element.timerStep, 100);
+        });
+        test('use of imperative syntax for element properties', function() {
+          var element = fixture('ImperativePropertySetFixture');
+          element.value = 29;
+          element.format = 'hh:mm';
+          element.timerStep = 1000;
+          assert.equal(element.format, 'hh:mm');
+          assert.equal(element.value, 29);
+          assert.equal(element.timerStep, 1000);
+        });
+        test('time is depicted correctly, depending on the element value', function() {
+          var element = fixture('CorrectTimeDisplayFixture');
+          var elementShadowRoot = element.shadowRoot;
+          var hoursSpan = elementShadowRoot.querySelector('.display-hours');
+          var minutesSpan = elementShadowRoot.querySelector('.display-minutes');
+          var secondsSpan = elementShadowRoot.querySelector('.display-seconds');
+          var millisecondsSpan = elementShadowRoot.querySelector('.display-milliseconds');
+          element.value = 117;
+          assert.equal(millisecondsSpan.textContent, '117');
+          assert.equal(secondsSpan.textContent, '00');
+          assert.equal(minutesSpan.textContent, '00');
+          assert.equal(hoursSpan.textContent, '00');
+          element.value = 117117117;
+          assert.equal(millisecondsSpan.textContent, '117');
+          assert.equal(secondsSpan.textContent, '57');
+          assert.equal(minutesSpan.textContent, '31');
+          assert.equal(hoursSpan.textContent, '32');
+          element.value = 'adfadf';
+          assert.equal(millisecondsSpan.textContent, '117');
+          assert.equal(secondsSpan.textContent, '57');
+          assert.equal(minutesSpan.textContent, '31');
+          assert.equal(hoursSpan.textContent, '32');
+          element.value = 360000000;
+          assert.equal(millisecondsSpan.textContent, '999');
+          assert.equal(secondsSpan.textContent, '59');
+          assert.equal(minutesSpan.textContent, '59');
+          assert.equal(hoursSpan.textContent, '99');
+        });
+        test('right counting in count state and pause in stop state', function(done) {
+          this.timeout(15000);
+          var element = fixture('StateTestFixture');
+          element.state = 'count';
+          clock.tick(1000);
+          assert.equal(element.value, 1000);
+          element.state = 'stop';
+          clock.tick(3000);
+          assert.equal(element.value, 1000);
+          element.state = 'count';
+          clock.tick(2000);
+          assert.equal(element.state, 'count');
+          assert.equal(element.value, 3000);
+          done();
+        });
+        test('different formats depicted correctly', function() {
+          var element = fixture('FormatTestFixture');
+          var elementShadowRoot = element.shadowRoot;
+          var hoursSpan = elementShadowRoot.querySelector('.display-hours');
+          var minutesSpan = elementShadowRoot.querySelector('.display-minutes');
+          var secondsSpan = elementShadowRoot.querySelector('.display-seconds');
+          var millisecondsSpan = elementShadowRoot.querySelector('.display-milliseconds');
+          element.format = 'hh:mm';
+          assert.equal(millisecondsSpan.className, 'display-milliseconds none');
+          assert.equal(hoursSpan.className, 'display-hours');
+          element.format = 'ss.ms';
+          assert.equal(millisecondsSpan.className, 'display-milliseconds');
+          assert.equal(hoursSpan.className, 'display-hours none');
+        });
+        test('different formats depicted correctly', function(done) {
+          this.timeout(15000);
+          var element = fixture('IntervalTestFixture');
+          element.state = 'count';
+          clock.tick(750);
+          assert.equal(element.value, 750, 'step one');
+          clock.tick(250);
+          element.state = 'stop';
+          element.timerStep = 100;
+          clock.tick(500);
+          assert.equal(element.value, 1000, 'step two');
+          element.state = 'count';
+          clock.tick(100);
+          assert.equal(element.value, 1100, 'step three');
+          clock.tick(500);
+          assert.equal(element.value, 1600, 'step four');
+          element.timerStep = 300;
+          clock.tick(200);
+          element.state = 'stop';
+          assert.equal(element.value, 1800, 'step five');
+          element.timerStep = 300;
+          element.state = 'count';
+          clock.tick(300);
+          assert.equal(element.value, 2100, 'step six');
+          done();
+        });
+        test('first value set test', function() {
+          var element = fixture('FirstValueTextFixture');
+          assert.equal(element.value, 1200000);
+        });
+        test('second value set test', function() {
+          var element = fixture('SecondsValueTextFixture');
+          assert.equal(element.value, 0);
+        });
+        test('third value set test', function() {
+          var element = fixture('ThirdValueTextFixture');
+          assert.equal(element.value, 0);
+        });
+        test('fourth value set test', function() {
+          var element = fixture('FourthValueTextFixture');
+          assert.equal(element.value, 20001);
+        });
+      });
+    </script>
+
+  </body>
+</html>

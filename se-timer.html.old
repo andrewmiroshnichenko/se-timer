@@ -1,0 +1,163 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="se-timer">
+  <template>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        border-radius: 0;
+        background: none;
+        border: 0;
+        outline: 0;
+      }    
+      :host {
+        display: block;
+      }
+      .display {
+        font: 45px/45px 'Roboto', sans-serif;
+        margin: 0 22px 0 21px; /*Calculated as equal to distance from glyph top to top edge of top menu. 21 - magic number for Android FF*/
+        display: inline-block;
+        vertical-align: middle;
+        /*margin-top: 10px;*/
+      }
+      .button {
+        width: 46px;
+        height: 46px;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .button_new {
+        background: url('https://maxcdn.icons8.com/Share/icon/Media_Controls//play1600.png') center center/contain no-repeat;
+      }
+      .button_count {
+        background: url('https://maxcdn.icons8.com/Share/icon/Media_Controls//stop1600.png') center center/contain no-repeat;
+      }
+      .button_finished {
+        background: url('https://maxcdn.icons8.com/Share/icon/Very_Basic//checkmark_filled1600.png') center center/contain no-repeat;
+      }
+    </style>
+    <div class="live-countdown__duration-wrapper">
+      <div class="display" title="Record duration"></div>
+      <button type="button" class="button button_new" title="Start new record"></button>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `se-timer`
+     * shows time in certain
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class SeTimer extends Polymer.Element {
+      static get is() { return 'se-timer'; }
+      static get properties() {
+        return {
+          displayElement: {
+            type: Object
+          },
+          actionButton: {
+            type: Object
+          },
+          state: {
+            type: String,
+            value: 'new'
+          },
+          timer: {
+            type: Object
+          },
+          startTime: {
+            type: Number
+          },
+          endTime: {
+            type: Number
+          },
+          intervalValue: {
+            type: Number,
+            value: 500
+          },
+          value: {
+            type: Number,
+            observer: '_valueObserver'
+          }
+        };
+      }
+      constructor() {
+        super();
+        this.boundActionButtonClickHandler = this.actionButtonClickHandler.bind(this);
+        this.boundShowTimeOnDisplay = this.showTimeOnDisplay.bind(this);
+      }
+      ready() {
+        super.ready();
+        let shadow = this.shadowRoot;
+        this.displayElement = shadow.querySelector('.display');
+        this.actionButton = shadow.querySelector('.button');
+        this.actionButton.setAttribute('title', 'Start new record');
+        this.value = 0;
+      }
+      connectedCallback() {
+        super.connectedCallback();
+        this.actionButton.addEventListener('click', this.boundActionButtonClickHandler);
+      }
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this.actionButton.removeEventListener('click', this.boundActionButtonClickHandler);
+      }
+      actionButtonClickHandler(e) {
+        switch (this.state) {
+          case 'new':
+            this.actionButton.className = 'button button_count';
+            this.state = 'counting';
+            this.actionButton.setAttribute('title', 'End recording');
+            this.timer = setInterval(this.boundShowTimeOnDisplay, this.intervalValue);
+            break;
+          case 'counting':
+            clearInterval(this.timer);
+            this.actionButton.className = 'button button_finished';
+            this.state = 'finished';
+            this.actionButton.setAttribute('title', 'Save the record');
+            break;
+          case 'finished':
+            // this.dispatchEvent(new CustomEvent('timersave', {detail: {value: this.value}}));
+            this.state = 'new';
+            this.actionButton.className = 'button button_new';
+            this.actionButton.setAttribute('title', 'Start new record');
+            this.value = 0;
+            break;
+        }
+      }
+      showTimeOnDisplay() {
+        this.value += this.intervalValue;
+      }
+      _isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      }
+      _valueObserver(newValue, oldValue) {
+        if (!this._isNumeric(newValue)) {
+          let timeArr = newValue.split(':');
+          if (timeArr.length === 3 && this._isNumeric(+timeArr[0]) && this._isNumeric(+timeArr[1]) && this._isNumeric(+timeArr[2])) {
+            this.value = timeArr[0]*3600000 + timeArr[1]*60000 + timeArr[2]*1000;
+          }
+        }
+        this.displayElement.textContent = this._formatTimeOnDisplay(this.value);
+      }
+      _formatSingleTimeValue(argument) {
+        return argument > 9 ? argument : '0' + argument;
+      }
+      _formatTimeOnDisplay(ms) {
+        let hours = this._formatSingleTimeValue(Math.floor(ms / 3600000));
+        let minutes = this._formatSingleTimeValue(Math.floor((ms - hours * 3600000) / 60000));
+        let seconds = this._formatSingleTimeValue(Math.floor((ms - hours * 3600000 - minutes * 60000) / 1000));
+        return hours + ':' + minutes + ':' + seconds;
+      }
+    }
+
+    window.customElements.define(SeTimer.is, SeTimer);
+  </script>
+</dom-module>
+
