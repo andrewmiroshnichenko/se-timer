@@ -22,7 +22,8 @@
       <h3>Basic se-timer demo</h3>
       <demo-snippet>
         <template>
-          <se-timer state="count" format="mm:ss.ms">22:22.22</se-timer>  <!-- Ok value match setted format attribute, 22:22.022 will be shown -->
+          <!-- <se-timer state="count" format="mm:ss.ms">22:22.22</se-timer> -->
+          <se-timer value="36610000" state="count" timer-step="100" format="hh:mm:ss.ms"></se-timer>
         </template>
       </demo-snippet>
     </div>

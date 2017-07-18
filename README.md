@@ -42,6 +42,13 @@ Number of milliseconds that should be reflected in the display. Value can’t ex
       customEl.value = 10000;
       customEl.value; // returns Number 10000
  ```
+ ```html
+      <se-timer>10:10:10</se-timer>
+```
+```javascript
+      var customEl = document.querySelector('se-timer');
+      customEl.value; // returns Number 36610000
+ ```
 2. timerStep
 
 |                             |            |
@@ -103,10 +110,10 @@ Format of output data. Seven formats are supported:
  - `hh`. Displays hours (value interval from 00 to 99);
  - `hh:mm`. Displays hours (value interval from 00 to 99) and minutes (value interval from 00 to 59);
  - `hh:mm:ss`. Displays hours (value interval from 00 to 99), minutes (value interval from 00 to 59) and seconds (value interval from 00 to 59);
- - `hh:mm:ss:ms`. Displays hours (value interval from 00 to 99), minutes (value interval from 00 to 59), seconds (value interval from 00 to 59) and milliseconds (value interval from 000 to 999);
+ - `hh:mm:ss.ms`. Displays hours (value interval from 00 to 99), minutes (value interval from 00 to 59), seconds (value interval from 00 to 59) and milliseconds (value interval from 000 to 999);
  - `mm:ss`. Displays  minutes (value interval from 00 to 59) and seconds (value interval from 00 to 59);
- - `mm:ss:ms`. Displays  minutes (value interval from 00 to 59), seconds (value interval from 00 to 59) and milliseconds (value interval from 000 to 999);
- - `ss:ms`. Displays seconds (value interval from 00 to 59) and milliseconds (value interval from 000 to 999);
+ - `mm:ss.ms`. Displays  minutes (value interval from 00 to 59), seconds (value interval from 00 to 59) and milliseconds (value interval from 000 to 999);
+ - `ss.ms`. Displays seconds (value interval from 00 to 59) and milliseconds (value interval from 000 to 999);
 
 ```html
       <se-timer format="hh"></se-timer>
@@ -131,5 +138,5 @@ Better view on
 ```
 -->
 ```html
-<se-timer value="60000" state="count" timer-step="100" format="mm:ss:ms"></se-timer>
+<se-timer value="60000" state="count" timer-step="100" format="mm:ss.ms"></se-timer>
 ```
