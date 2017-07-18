@@ -22,6 +22,7 @@ $ polymer test
 ## API
 Component have four public properties.
 1. Value
+
 |                             |         |
 | ---                         | ---     |
 | **Property name**           | value   |
@@ -42,6 +43,7 @@ Number of milliseconds that should be reflected in the display. Value can’t ex
       customEl.value; // returns Number 10000
  ```
 2. timerStep
+
 |                             |            |
 | ---                         | ---        |
 | **Property name**           | timerStep  |
@@ -116,7 +118,7 @@ Format of output data. Seven formats are supported:
       customEl.state; // returns Number 'hh:mm:ss:ms'
  ```
 # Demo
-
+Better view on 
  <!--
 ```
 <custom-element-demo>
@@ -129,5 +131,5 @@ Format of output data. Seven formats are supported:
 ```
 -->
 ```html
-<se-timer></se-timer>
+<se-timer value="60000" state="count" timer-step="100" format="mm:ss:ms"></se-timer>
 ```
