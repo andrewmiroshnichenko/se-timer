@@ -1,4 +1,5 @@
-# \<se-timer\>
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/andrewmiroshnichenko/se-timer)
+# se-timer
 
 Shows time in certain format and ticks it
 
@@ -67,9 +68,9 @@ Frequency of polling of current time and, subsequently, displayed time updating 
 ```
 ```javascript
       var customEl = document.querySelector('se-timer');
-      customEl.value; // returns Number 100
+      customEl.timerStep; // returns Number 100
       customEl.timerStep = 120;
-      customEl.value; // returns Number 120
+      customEl.timerStep; // returns Number 120
  ```
 3. State
 
@@ -92,8 +93,8 @@ State of the component. Two possible values are:
 ```javascript
       var customEl = document.querySelector('se-timer');
       customEl.state; // returns String 'stop'
-      customEl.state = 120;
-      customEl.state; // returns Number 'count'
+      customEl.state = 'count';
+      customEl.state; // returns String 'count'
  ```
 4. Format
 
@@ -120,12 +121,23 @@ Format of output data. Seven formats are supported:
 ```
 ```javascript
       var customEl = document.querySelector('se-timer');
-      customEl.state; // returns String 'hh'
-      customEl.state = 'hh:mm:ss:ms';
-      customEl.state; // returns Number 'hh:mm:ss:ms'
+      customEl.format; // returns String 'hh'
+      customEl.format = 'hh:mm:ss:ms';
+      customEl.format; // returns Number 'hh:mm:ss:ms'
  ```
+## Styling
+
+The following custom properties are available for styling:
+
+| Custom property              | Description                                                        |         Default         |
+| ---                          | ---                                                                |           ---           |
+| `--setimer-number-color`     | Timer digits color                                                 | Browser-default(black)  |
+| `--setimer-number-size`      | Font size of timer digits. This param changes component dimensions |          45px           |
+| `--setimer-background-color` | Component's background color                                       |      `transparent`      |
+| `--setimer-font-family`      | Font family of digits                                              |  `Roboto, sans-serif`   |
+
 # Demo
-Better view on 
+Better view on [webcomponentsjs.org](https://www.webcomponents.org/element/andrewmiroshnichenko/se-timer)
  <!--
 ```
 <custom-element-demo>
