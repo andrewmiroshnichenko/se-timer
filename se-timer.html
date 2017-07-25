@@ -18,11 +18,19 @@
       .display {
         font-size: 0;
         margin: 0 22px 0 21px; /*Calculated as equal to distance from glyph top to top edge of top menu. 21 - magic number for Android FF*/
+        margin: 0 calc(var(--setimer-number-size, 45px) / 2);
       }
       span {
         font: 45px/45px 'Roboto', sans-serif;
+        font-family: var(--setimer-font-family, 'Roboto', sans-serif);
+        font-size: calc(var(--setimer-number-size, 45px));
+        line-height: calc(var(--setimer-number-size, 45px));
         display: inline-block;
         vertical-align: middle;
+        color: black;
+        color: var(--setimer-number-color);
+        background-color: transparent;
+        background-color: var(--setimer-background-color, transparent);
       }
       .none {
         display: none;
