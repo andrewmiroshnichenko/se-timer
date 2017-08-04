@@ -10,9 +10,16 @@
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../se-timer.html">
+    <style>
+      .test-timeinput {
+        --setimer-number-font-size: 32px;
+        --setimer-font-family: 'Comic Sans';
+        --setimer-number-color: orange;
+        --setimer-background-color: blue;
+      }
+    </style>
   </head>
   <body>
-
 
     <test-fixture id="DeclarativePropertySetFixture">
       <template>
@@ -71,6 +78,12 @@
     <test-fixture id="FourthValueTextFixture">
       <template>
         <se-timer format="mm:ss.ms">00:20.1</se-timer>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="StylesFixture">
+      <template>
+        <se-timer class="test-timeinput" value="3600000" format="mm:ss.ms"></se-timer>
       </template>
     </test-fixture>
 
@@ -192,6 +205,13 @@
         test('fourth value set test', function() {
           var element = fixture('FourthValueTextFixture');
           assert.equal(element.value, 20001);
+        });
+        test('manipulating of styles', function() {
+          var element = fixture('StylesFixture');
+          assert.equal(getComputedStyle(element.__displayElement.minutesSpan).fontFamily, '"Comic Sans"', 'check font family');
+          assert.equal(getComputedStyle(element.__displayElement.minutesSpan).fontSize, '32px', 'check font size');
+          assert.equal(getComputedStyle(element.__displayElement.minutesSpan).backgroundColor, 'rgb(0, 0, 255)', 'check background color');
+          assert.equal(getComputedStyle(element.__displayElement.minutesSpan).color, 'rgb(255, 165, 0)', 'check main color');
         });
       });
     </script>
