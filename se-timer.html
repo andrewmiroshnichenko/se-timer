@@ -1,52 +1,35 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
 <dom-module id="se-timer">
- <template>
+ <template strip-whitespace>
   <style>
-   * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    border-radius: 0;
-    background: none;
-    border: 0;
-    outline: 0;
-   }
-   :host {
-    display: block;
-   }
    .display {
     font-size: 0;
-    margin: 0 22px 0 21px; /*Calculated as equal to distance from glyph top to top edge of top menu. 21 - magic number for Android FF*/
-    margin: 0 calc(var(--setimer-number-size, 45px) / 2);
    }
+
    span {
-    font: 45px/45px 'Roboto', sans-serif;
-    font-family: var(--setimer-font-family, 'Roboto', sans-serif);
-    font-size: calc(var(--setimer-number-size, 45px));
-    line-height: calc(var(--setimer-number-size, 45px));
+    font-size: var(--setimer-number-size, 45px);
     display: inline-block;
-    vertical-align: middle;
-    color: black;
-    color: var(--setimer-number-color);
-    background-color: transparent;
-    background-color: var(--setimer-background-color, transparent);
    }
+
    .none {
     display: none;
    }
   </style>
+
   <div class="live-countdown__duration-wrapper">
    <div class="slot none"><slot></slot></div>
-   <div class="display" title="Record duration">
-    <span class="display-hours none"></span>
-    <span class="display-delimiter-first none">:</span>
-    <span class="display-minutes none"></span>
-    <span class="display-delimiter-second none">:</span>
-    <span class="display-seconds none"></span>
-    <span class="display-delimiter-third none">.</span>
-    <span class="display-milliseconds none"></span>
-   </div>
+   <span class="display">
+        <slot name="prefix"></slot>
+        <span class="display-hours none"></span>
+        <span class="display-delimiter-first none">:</span>
+        <span class="display-minutes none"></span>
+        <span class="display-delimiter-second none">:</span>
+        <span class="display-seconds none"></span>
+        <span class="display-delimiter-third none">.</span>
+        <span class="display-milliseconds none"></span>
+        <slot name="suffix"></slot>
+      </span>
   </div>
  </template>
 
@@ -243,10 +226,10 @@
              return formatted;
          }
          _formatTimeOnDisplay(ms) {
-             let hours = this._formatSingleTimeValue(Math.floor(ms / 3600000));
-             let minutes = this._formatSingleTimeValue(Math.floor((ms - hours * 3600000) / 60000));
-             let seconds = this._formatSingleTimeValue(Math.floor((ms - hours * 3600000 - minutes * 60000) / 1000));
-             let milliseconds = this._formatMillisecondsValue(ms - hours * 3600000 - minutes * 60000 - seconds * 1000);
+             const hours = this._formatSingleTimeValue(Math.floor(ms / 3600000));
+             const minutes = this._formatSingleTimeValue(Math.floor((ms - hours * 3600000) / 60000));
+             const seconds = this._formatSingleTimeValue(Math.floor((ms - hours * 3600000 - minutes * 60000) / 1000));
+             const milliseconds = this._formatMillisecondsValue(ms - hours * 3600000 - minutes * 60000 - seconds * 1000);
              return {hours: hours, minutes: minutes, seconds: seconds, milliseconds: milliseconds};
          }
      }
