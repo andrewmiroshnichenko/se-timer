@@ -131,6 +131,7 @@
              super.connectedCallback();
          }
          disconnectedCallback() {
+             clearInterval(this.__timer);
              super.disconnectedCallback();
          }
          _showTimeOnDisplay() {
