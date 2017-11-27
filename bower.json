@@ -3,17 +3,14 @@
   "description": "shows time in certain format, can be defined by user",
   "main": "se-timer.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^2.0.0-rc.2"
+    "polymer": "Polymer/polymer#^2.0.0"
   },
   "keywords": ["timer", "web-components", "polymer", "time-display"],
   "license": "Apache 2",
   "devDependencies": {
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
-    "web-component-tester": "^6.0.0-prerelease.5",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.5"
-  },
-  "resolutions": {
-    "polymer": "^2.0.0-rc.2"
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "repository": {
     "type": "git",

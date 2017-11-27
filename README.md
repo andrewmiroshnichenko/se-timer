@@ -151,4 +151,5 @@ Better view on [webcomponentsjs.org](https://www.webcomponents.org/element/andre
 -->
 ```html
 <se-timer value="60000" state="count" timer-step="100" format="mm:ss.ms"></se-timer>
+<se-timer countdown value="60000" state="count" timer-step="100" format="mm:ss.ms"></se-timer>
 ```
